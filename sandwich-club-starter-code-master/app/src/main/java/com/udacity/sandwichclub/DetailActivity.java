@@ -3,8 +3,12 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+
 
 import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
@@ -14,7 +18,12 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
-
+    private  TextView mainName;
+    private  TextView alsoKnownAs;
+    private  TextView placeOfOrigin;
+    private  TextView description;
+    private  TextView image;
+    private  TextView ingredients;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +45,9 @@ public class DetailActivity extends AppCompatActivity {
 
         String[] sandwiches = getResources().getStringArray(R.array.sandwich_details);
         String json = sandwiches[position];
+        Log.v("json",json);
         Sandwich sandwich = JsonUtils.parseSandwichJson(json);
+
         if (sandwich == null) {
             // Sandwich data unavailable
             closeOnError();
@@ -48,7 +59,10 @@ public class DetailActivity extends AppCompatActivity {
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
 
+
         setTitle(sandwich.getMainName());
+        mainName = (TextView) findViewById(R.id.mainNameContent);
+
     }
 
     private void closeOnError() {
