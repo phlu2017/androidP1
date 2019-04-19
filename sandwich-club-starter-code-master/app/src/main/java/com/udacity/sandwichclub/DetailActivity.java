@@ -18,12 +18,11 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
-    private  TextView mainName;
-    private  TextView alsoKnownAs;
-    private  TextView placeOfOrigin;
-    private  TextView description;
-    private  TextView image;
-    private  TextView ingredients;
+
+    private TextView alsoKnownAs;
+    private TextView placeOfOrigin;
+    private TextView description;
+    private TextView ingredients;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +44,6 @@ public class DetailActivity extends AppCompatActivity {
 
         String[] sandwiches = getResources().getStringArray(R.array.sandwich_details);
         String json = sandwiches[position];
-        Log.v("json",json);
         Sandwich sandwich = JsonUtils.parseSandwichJson(json);
 
         if (sandwich == null) {
@@ -54,14 +52,12 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
-
-
         setTitle(sandwich.getMainName());
-        mainName = (TextView) findViewById(R.id.mainNameContent);
+
 
     }
 
@@ -70,7 +66,16 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
-
+    private void populateUI(Sandwich sandwich) {
+        alsoKnownAs = (TextView) findViewById(R.id.asKnowAsText);
+        placeOfOrigin = (TextView) findViewById(R.id.placeOfOriginText);
+        description  = (TextView) findViewById(R.id.descriptionText);
+        ingredients = (TextView) findViewById(R.id.ingredientsText);
+        for(String asKnowas: sandwich.getAlsoKnownAs())
+            alsoKnownAs.append(asKnowas+"\n");
+        placeOfOrigin.setText(sandwich.getPlaceOfOrigin()+"\n");
+        description.setText(sandwich.getDescription()+"\n");
+        for(String ingredient: sandwich.getIngredients())
+            ingredients.append(ingredient+"\n");
     }
 }
